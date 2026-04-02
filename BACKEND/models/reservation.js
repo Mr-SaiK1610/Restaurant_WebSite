@@ -3,27 +3,27 @@ import mongoose from "mongoose";
 const reservationSchema = new mongoose.Schema({
   firstName: {
     type: String,
-    required: true,
+    required: [true, "First Name is required"],
   },
   lastName: {
     type: String,
-    required: true,
+    required: [true, "Last Name is required"],
   },
   email: {
     type: String,
-    required: true,
+    required: [true, "Email is required"],
   },
   phone: {
-    type: String, // ✅ IMPORTANT (not Number)
-    required: true,
+    type: String, // ✅ MUST be string
+    required: [true, "Phone is required"],
   },
   date: {
     type: String,
-    required: true,
+    required: [true, "Date is required"],
   },
   time: {
     type: String,
-    required: true,
+    required: [true, "Time is required"],
   },
 });
 
