@@ -9,6 +9,7 @@ dotenv.config({ path: "./.env" });
 
 const app = express();
 
+// Debug log
 console.log("FRONTEND_URL:", process.env.FRONTEND_URL);
 
 // Request logger
@@ -17,15 +18,25 @@ app.use((req, res, next) => {
   next();
 });
 
-// ✅ CORS FIX
+// ✅ CORS FIX (FINAL)
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://restaurant-website-frontend-oa98.onrender.com",
+];
+
 app.use(
   cors({
-    origin: "http://localhost:5173",
+    origin: function (origin, callback) {
+      if (!origin || allowedOrigins.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new Error("Not allowed by CORS"));
+      }
+    },
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     credentials: true,
   })
 );
-
 
 // Body parsers
 app.use(express.json());
@@ -34,6 +45,7 @@ app.use(express.urlencoded({ extended: true }));
 // Routes
 app.use("/api/v1/reservation", reservationRouter);
 
+// Test route
 app.get("/", (req, res) => {
   res.status(200).json({
     success: true,
@@ -41,7 +53,7 @@ app.get("/", (req, res) => {
   });
 });
 
-// DB
+// DB connection
 dbConnection();
 
 // Error handler
